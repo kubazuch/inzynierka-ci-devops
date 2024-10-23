@@ -1,0 +1,36 @@
+name: Run Linter (clang-format, clang-tidy) 🧹
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  check-linter:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        id: checkout-code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        id: install-deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install python3 gcc-14 g++-14 git libwayland-dev libxkbcommon-dev xorg-dev cmake cmake-format clangd clang clang-tidy git
+          curl https://raw.githubusercontent.com/llvm/llvm-project/refs/heads/main/clang-tools-extra/clang-tidy/tool/run-clang-tidy.py > run-clang-tidy.py
+          
+      - name: CMake Configure
+        id: cmake-configure
+        run: |
+          cmake --preset=ci-ubuntu-gcc
+          cmake --build --preset=ci-ubuntu-gcc
+
+      - name: Run clang-format
+        id: run-clang-format
+        run: |
+          find . -path ./build -prune -o \( -iname "*.cpp" -o -iname "*.hpp" \) -print | xargs clang-format --verbose --dry-run -Werror
+
+      - name: Run clang-tidy
+        id: run-clang-tidy
+        run: |
+          python3 run-clang-tidy.py -p build -warnings-as-errors *
