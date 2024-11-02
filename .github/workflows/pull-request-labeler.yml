@@ -22,22 +22,21 @@ jobs:
         run: |
           branch="${{github.head_ref}}"
           prefix=${branch%%/*}
-          echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}"
-          
-          echo "The major version label is ${{ env.MAJOR_LABEL }} and will be applied to following prefixes:"
-          for prefix in ${{ env.MAJOR_PREFIXES }}; do
-            echo "  - ${prefix}"
-          done
-          
-          echo "The minor version label is ${{ env.MINOR_LABEL }} and will be applied to following prefixes:"
-          for prefix in ${{ env.MINOR_PREFIXES }}; do
-            echo "  - ${prefix}"
-          done
-          
-          echo "The patch version label is ${{ env.PATCH_LABEL }} and will be applied to following prefixes:"
-          for prefix in ${{ env.PATCH_PREFIXES }}; do
-            echo "  - ${prefix}"
-          done
+          echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}
+
+          # Check if prefix matches any version prefix
+          if [[ ${{ env.MAJOR_PREFIXES }} == *"$prefix"* ]]; then
+              echo "Found major prefix."
+              label=${{ env.MAJOR_LABEL }}
+          elif [[ ${{ env.MINOR_PREFIXES }} == *"$prefix"* ]]; then
+              echo "Found minor prefix."
+              label=${{ env.MINOR_LABEL }}
+          elif [[ ${{ env.PATCH_PREFIXES }} == *"$prefix"* ]]; then
+              echo "Found patch prefix."
+              label=${{ env.PATCH_LABEL }}
+          else
+              echo "No matching prefix found!"
+          fi
       # - run: gh issue edit "$NUMBER" --add-label "$LABELS"
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
