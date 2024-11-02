@@ -10,10 +10,33 @@ jobs:
       issues: write
     runs-on: ubuntu-latest
     name: Label the PR
+    env:
+      MAJOR_LABEL: 'version/major 🏗️'
+      MAJOR_PREFIXES: 'release'
+      MINOR_LABEL: 'version/minor 🔨'
+      MINOR_PREFIXES: 'feature'
+      PATCH_LABEL: 'version/patch 🪶'
+      PATCH_PREFIXES: 'bugfix task'
     steps: # TODO: add label based on major/minor version
       - name: Display PR branch name
         run: |
-          echo "The PR branch name is: ${{ github.head_ref }}"
+          prefix=${${{github.head_ref}}%%/*}
+          echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}"
+          
+          echo "The major version label is ${{ env.MAJOR_LABEL }} and will be applied to following prefixes:"
+          for prefix in ${{ env.MAJOR_PREFIXES }}; do
+            echo "  - ${prefix}"
+          done
+          
+          echo "The minor version label is ${{ env.MINOR_LABEL }} and will be applied to following prefixes:"
+          for prefix in ${{ env.MINOR_PREFIXES }}; do
+            echo "  - ${prefix}"
+          done
+          
+          echo "The patch version label is ${{ env.PATCH_LABEL }} and will be applied to following prefixes:"
+          for prefix in ${{ env.PATCH_PREFIXES }}; do
+            echo "  - ${prefix}"
+          done
       # - run: gh issue edit "$NUMBER" --add-label "$LABELS"
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
