@@ -25,15 +25,15 @@ jobs:
           echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}
 
           # Check if prefix matches any version prefix
-          if [[ ${{ env.MAJOR_PREFIXES }} == *"$prefix"* ]]; then
+          if [[ "${{ env.MAJOR_PREFIXES }}" == *"$prefix"* ]]; then
               echo "Found major prefix."
-              label=${{ env.MAJOR_LABEL }}
-          elif [[ ${{ env.MINOR_PREFIXES }} == *"$prefix"* ]]; then
+              label="${{ env.MAJOR_LABEL }}"
+          elif [[ "${{ env.MINOR_PREFIXES }}" == *"$prefix"* ]]; then
               echo "Found minor prefix."
-              label=${{ env.MINOR_LABEL }}
-          elif [[ ${{ env.PATCH_PREFIXES }} == *"$prefix"* ]]; then
+              label="${{ env.MINOR_LABEL }}"
+          elif [[ "${{ env.PATCH_PREFIXES }}" == *"$prefix"* ]]; then
               echo "Found patch prefix."
-              label=${{ env.PATCH_LABEL }}
+              label="${{ env.PATCH_LABEL }}"
           else
               echo "No matching prefix found!"
           fi
