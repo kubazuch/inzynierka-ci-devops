@@ -20,6 +20,7 @@ jobs:
     steps:
       - name: Determine version label
         id: extract-version-label
+        # if: ${{ github.event.action == 'opened' }}
         run: |
           branch="${{github.head_ref}}"
           prefix=${branch%%/*}
@@ -31,16 +32,17 @@ jobs:
               echo "label=$MAJOR_LABEL" >> $GITHUB_OUTPUT
           elif [[ "$MINOR_PREFIXES" == *"$prefix"* ]]; then
               echo "Found minor prefix."
-              label="$MINOR_LABEL"
+              echo "label=$MINOR_LABEL" >> $GITHUB_OUTPUT
           elif [[ "$PATCH_PREFIXES" == *"$prefix"* ]]; then
               echo "Found patch prefix."
-              label="$PATCH_LABEL"
+              echo "label=$PATCH_LABEL" >> $GITHUB_OUTPUT
           else
               echo "No matching prefix found!"
           fi
-      # - run: gh issue edit "$NUMBER" --add-label "$LABELS"
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     GH_REPO: ${{ github.repository }}
-      #     NUMBER: ${{ github.event.issue.number }}
-      #     LABELS: triage
+      - run: gh pr edit "$NUMBER" --add-label "$LABEL"
+        # if: ${{ github.event.action == 'opened' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          LABEL: ${{ steps.extract-version-label.outputs.label }}
