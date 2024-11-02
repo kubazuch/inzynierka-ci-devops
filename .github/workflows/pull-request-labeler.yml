@@ -12,7 +12,8 @@ jobs:
     name: Label the PR
     steps: # TODO: add label based on major/minor version
       - name: Display PR branch name
-        run: echo "The PR branch name is: ${{ github.head_ref }}"
+        run: |
+          echo "The PR branch name is: ${{ github.head_ref }}"
       # - run: gh issue edit "$NUMBER" --add-label "$LABELS"
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
