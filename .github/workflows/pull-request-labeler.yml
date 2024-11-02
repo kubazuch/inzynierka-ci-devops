@@ -17,23 +17,24 @@ jobs:
       MINOR_PREFIXES: 'featuroe'
       PATCH_LABEL: 'version/patch 🪶'
       PATCH_PREFIXES: 'bugfix task'
-    steps: # TODO: add label based on major/minor version
-      - name: Display PR branch name
+    steps:
+      - name: Determine version label
+        id: extract-version-label
         run: |
           branch="${{github.head_ref}}"
           prefix=${branch%%/*}
           echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}"
 
           # Check if prefix matches any version prefix
-          if [[ "${{ env.MAJOR_PREFIXES }}" == *"$prefix"* ]]; then
+          if [[ "$MAJOR_PREFIXES" == *"$prefix"* ]]; then
               echo "Found major prefix."
-              label="${{ env.MAJOR_LABEL }}"
-          elif [[ "${{ env.MINOR_PREFIXES }}" == *"$prefix"* ]]; then
+              echo "label=$MAJOR_LABEL" >> $GITHUB_OUTPUT
+          elif [[ "$MINOR_PREFIXES" == *"$prefix"* ]]; then
               echo "Found minor prefix."
-              label="${{ env.MINOR_LABEL }}"
-          elif [[ "${{ env.PATCH_PREFIXES }}" == *"$prefix"* ]]; then
+              label="$MINOR_LABEL"
+          elif [[ "$PATCH_PREFIXES" == *"$prefix"* ]]; then
               echo "Found patch prefix."
-              label="${{ env.PATCH_LABEL }}"
+              label="$PATCH_LABEL"
           else
               echo "No matching prefix found!"
           fi
