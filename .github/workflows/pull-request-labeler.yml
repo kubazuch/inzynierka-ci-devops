@@ -20,7 +20,8 @@ jobs:
     steps: # TODO: add label based on major/minor version
       - name: Display PR branch name
         run: |
-          prefix=${${{github.head_ref}}%%/*}
+          branch="${{github.head_ref}}"
+          prefix=${branch%%/*}
           echo "The PR branch name is: ${{ github.head_ref }}, the prefix is: ${prefix}"
           
           echo "The major version label is ${{ env.MAJOR_LABEL }} and will be applied to following prefixes:"
