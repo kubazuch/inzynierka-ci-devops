@@ -14,7 +14,7 @@ jobs:
       MAJOR_LABEL: 'version/major 🏗️'
       MAJOR_PREFIXES: 'release'
       MINOR_LABEL: 'version/minor 🔨'
-      MINOR_PREFIXES: 'feature'
+      MINOR_PREFIXES: 'featuroe'
       PATCH_LABEL: 'version/patch 🪶'
       PATCH_PREFIXES: 'bugfix task'
     steps: # TODO: add label based on major/minor version
