@@ -3,13 +3,14 @@ name: Apply labels to Pull Requests 📝🏷️
 on: [pull_request]
 
 jobs:
-  labeler:
+  # TODO: add size labeling
+  label-pull-request-version:
     permissions:
       pull-requests: write
       contents: read
       issues: write
     runs-on: ubuntu-latest
-    name: Label the PR
+    name: Label the PR with version label
     env:
       MAJOR_LABEL: 'version/major 🏗️'
       MAJOR_PREFIXES: 'release'
@@ -18,7 +19,6 @@ jobs:
       PATCH_LABEL: 'version/patch 🪶'
       PATCH_PREFIXES: 'bugfix task'
     steps:
-      # TODO: add size labeling
       - name: Determine version label
         id: extract-version-label
         if: ${{ github.event.action == 'opened' }}

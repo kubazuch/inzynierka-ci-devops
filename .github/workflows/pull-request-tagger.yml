@@ -1,15 +1,15 @@
-name: Create tags from Pull Requests
+name: Create tags from Pull Requests 🏷️
 
 on: [pull_request]
 
 jobs:
-  labeler:
+  tag:
     permissions:
       pull-requests: write
       contents: read
       issues: write
     runs-on: ubuntu-latest
-    name: 
+    name: Create tag based on label
     env:
       MAJOR_LABEL: 'version/major 🏗️'
       MINOR_LABEL: 'version/minor 🔨'
