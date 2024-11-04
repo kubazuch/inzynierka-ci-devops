@@ -54,3 +54,14 @@ jobs:
           # Format the new tag
           new_tag="v$major.$minor.$patch"
           echo "The new tag is: $new_tag"
+          echo "tag=$new_tag" >> $GITHUB_OUTPUT
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.determine-tag.outputs.tag }}',
+              sha: context.sha
+            })
