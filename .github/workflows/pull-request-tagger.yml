@@ -61,6 +61,7 @@ jobs:
         uses: actions/github-script@v5
         if: steps.determine-tag.outputs.tag != ''
         with:
+          github-token: ${{ secrets.TAG_PAT }}
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
