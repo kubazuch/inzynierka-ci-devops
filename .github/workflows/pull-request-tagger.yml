@@ -1,0 +1,23 @@
+name: tagger
+
+on: [pull_request]
+
+jobs:
+  labeler:
+    permissions:
+      pull-requests: write
+      contents: read
+      issues: write
+    runs-on: ubuntu-latest
+    name: 
+    env:
+      MAJOR_LABEL: 'version/major 🏗️'
+      MINOR_LABEL: 'version/minor 🔨'
+      PATCH_LABEL: 'version/patch 🪶'
+    steps:
+      - name: Determine new tag
+        id: determine-tag
+        run: |
+          current_tag=$(git tag --sort=-v:refname | head -n 1)
+          
+          echo "The latest tag is: ${current_tag}"
