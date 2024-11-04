@@ -1,4 +1,4 @@
-name: tagger
+name: Create tags from Pull Requests
 
 on: [pull_request]
 
@@ -26,6 +26,6 @@ jobs:
       - name: Determine new tag
         id: determine-tag
         run: |
-          current_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
+          current_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1 || echo "v0.0.1")
           
           echo "The latest tag is: ${current_tag}"
