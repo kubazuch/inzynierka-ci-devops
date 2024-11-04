@@ -18,9 +18,10 @@ jobs:
       PATCH_LABEL: 'version/patch 🪶'
       PATCH_PREFIXES: 'bugfix task'
     steps:
+      # TODO: add size labeling
       - name: Determine version label
         id: extract-version-label
-        # if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           branch="${{github.head_ref}}"
           prefix=${branch%%/*}
@@ -40,7 +41,7 @@ jobs:
               echo "No matching prefix found!"
           fi
       - run: gh pr edit "$NUMBER" --add-label "$LABEL"
-        # if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
