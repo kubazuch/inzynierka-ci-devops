@@ -26,9 +26,31 @@ jobs:
       - name: Determine new tag
         id: determine-tag
         run: |
+          # Fetch the highest tag
           current_tag=$((git tag --sort=-v:refname | grep '^v' || echo "v0.0.0") | head -n 1)
-          
-          echo "The latest tag is: ${current_tag}"
-          echo "${{ contains(github.event.pull_request.labels.*.name, env.MAJOR_LABEL) }}"
-          echo "${{ contains(github.event.pull_request.labels.*.name, env.MINOR_LABEL) }}"
-          echo "${{ contains(github.event.pull_request.labels.*.name, env.PATCH_LABEL) }}"
+          echo "The current tag is: $current_tag"
+
+          # Parse the current version into major, minor, patch parts
+          IFS='.' read -r major minor patch <<< "${current_tag//v/}"
+
+          # Calculate the next version
+          if [ ${{ contains(github.event.pull_request.labels.*.name, env.MAJOR_LABEL) }} = true ]; then
+            echo "Found major release label '$MAJOR_LABEL'."
+            major=$((major + 1))
+            minor=0
+            patch=0
+          elif [ ${{ contains(github.event.pull_request.labels.*.name, env.MINOR_LABEL) }} = true ]; then
+            echo "Found minor release label '$MINOR_LABEL'."
+            minor=$((minor + 1))
+            patch=0
+          elif [ ${{ contains(github.event.pull_request.labels.*.name, env.PATCH_LABEL) }} = true ]; then
+            echo "Found patch release label '$PATCH_LABEL'."
+            patch=$((patch + 1))
+          else
+            echo "Nothing to do! Neither of labels '$MAJOR_LABEL', '$MINOR_LABEL' nor '$PATCH_LABEL' found."
+            exit 0
+          fi
+
+          # Format the new tag
+          new_tag="v$major.$minor.$patch"
+          echo "The new tag is: $new_tag"
