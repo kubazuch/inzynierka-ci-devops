@@ -18,7 +18,7 @@ jobs:
           echo "Tag name: $TAG_NAME"
 
           # Parse the current version into major, minor, patch parts
-          IFS='.' read -r major minor patch <<< "${current_tag//v/}"
+          IFS='.' read -r major minor patch <<< "${TAG_NAME//v/}"
 
           if [ $major -eq 0 ]; then
             echo "prerelease=true" >> $GITHUB_OUTPUT
