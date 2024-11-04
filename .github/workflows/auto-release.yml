@@ -1,0 +1,25 @@
+name: Auto release 🍝
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Build & test"
+        run: |
+          # Extract the tag name from github.ref
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "Tag name: $TAG_NAME"
+
+    #   - uses: "marvinpinto/action-automatic-releases@latest"
+    #     with:
+    #       repo_token: "${{ secrets.GITHUB_TOKEN }}"
+    #       prerelease: false
+    #       files: |
+    #         LICENSE.txt
+    #         *.jar
