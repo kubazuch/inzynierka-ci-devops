@@ -5,9 +5,7 @@ on: [pull_request]
 jobs:
   tag:
     permissions:
-      pull-requests: write
-      contents: read
-      issues: write
+      contents: write
     runs-on: ubuntu-latest
     name: Create tag based on label
     env:
