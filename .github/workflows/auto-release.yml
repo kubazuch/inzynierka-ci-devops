@@ -10,16 +10,22 @@ jobs:
     name: "Tagged Release"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Build & test"
+      - name: "Determine whether pre-release applies"
+        id: prerelease
         run: |
           # Extract the tag name from github.ref
           TAG_NAME=${GITHUB_REF#refs/tags/}
           echo "Tag name: $TAG_NAME"
 
-    #   - uses: "marvinpinto/action-automatic-releases@latest"
-    #     with:
-    #       repo_token: "${{ secrets.GITHUB_TOKEN }}"
-    #       prerelease: false
-    #       files: |
-    #         LICENSE.txt
-    #         *.jar
+          # Parse the current version into major, minor, patch parts
+          IFS='.' read -r major minor patch <<< "${current_tag//v/}"
+
+          if [ $major -eq 0 ]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: ${{ steps.prerelease.outputs.prerelease }}
