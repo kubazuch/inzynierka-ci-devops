@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: "Build & test"
         run: |
-          echo "done!"
+          # Extract the tag name from github.ref
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "Tag name: $TAG_NAME"
 
     #   - uses: "marvinpinto/action-automatic-releases@latest"
     #     with:

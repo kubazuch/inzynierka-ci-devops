@@ -1,6 +1,9 @@
 name: Create tag from Pull Request 🏷️
 
-on: [pull_request]
+on:
+  pull_request: 
+    types: 
+      - closed
 
 jobs:
   tag:
@@ -8,6 +11,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     name: Create tag based on label
+    if: github.event.pull_request.merged == true
     env:
       MAJOR_LABEL: 'version/major 🏗️'
       MINOR_LABEL: 'version/minor 🔨'
