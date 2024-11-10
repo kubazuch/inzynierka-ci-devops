@@ -21,7 +21,7 @@ jobs:
         id: checkout-code
         uses: actions/checkout@v4 # I know this is a bad idea and I should do this prolly with GitHub api, this will be fixed later (i.e. never)
         with:
-          # The binary versioning depends to on the git annotated tags. 
+          # The binary versioning depends on the git annotated tags. 
           # This line forces checkout action to fetch the tags, see
           # https://github.com/actions/checkout/issues/701.
           fetch-depth: 0
