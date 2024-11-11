@@ -6,13 +6,15 @@ message(STATUS "Configuring " ${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_library(${PROJECT_NAME} libresin/resin.cpp libresin/resin.hpp
-        libresin/core/transform.hpp libresin/core/transform.cpp)
+add_library(${PROJECT_NAME} libresin/resin.cpp libresin/resin.hpp 
+        libresin/core/transform.hpp libresin/core/transform.cpp
+        libresin/utils/logger.cpp libresin/utils/logger.hpp)
 
 # Prevent CMake from adding `lib` before `libresin`
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-target_include_directories(${PROJECT_NAME} PUBLIC .)
+target_include_directories(${PROJECT_NAME}
+                           PUBLIC . "${CMAKE_BINARY_DIR}/generated")
 target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
 
 # Set compile options and properties of the target
