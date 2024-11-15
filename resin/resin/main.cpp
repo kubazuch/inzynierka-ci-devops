@@ -4,10 +4,10 @@
 
 #include <filesystem>
 #include <glm/glm.hpp>
-#include <libresin/resin.hpp>
 #include <libresin/utils/logger.hpp>
 #include <memory>
 #include <print>
+#include <resin/resin.hpp>
 #include <version/version.hpp>
 
 int main() {
@@ -32,22 +32,7 @@ int main() {
   resin::Logger::err("Paprica");
   resin::Logger::debug("Blueberry");
 
-  constexpr int kWidth  = 800;
-  constexpr int kHeight = 600;
-
-  glfwInit();
-  GLFWwindow* window = glfwCreateWindow(kWidth, kHeight, "Test", nullptr, nullptr);
-  glfwMakeContextCurrent(window);
-
-  const int glad_version = gladLoadGL(glfwGetProcAddress);
-  if (glad_version == 0) {
-    resin::Logger::err("Failed to initialize OpenGL context");
-    return -1;
-  }
-
-  resin::Logger::info("GLAD version: {0}.{1}", GLAD_VERSION_MAJOR(glad_version), GLAD_VERSION_MINOR(glad_version));
-
-  glfwDestroyWindow(window);
+  resin::Resin::instance().run();
 
   return 0;
 }
