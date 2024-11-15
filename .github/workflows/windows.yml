@@ -35,8 +35,8 @@ jobs:
       id: install-deps
       shell: pwsh
       run: |
-        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
-        choco install git --installargs 'ADD_CMAKE_TO_PATH=System' -y
+        # choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+        # choco install git --installargs 'ADD_CMAKE_TO_PATH=System' -y
         python3 -m pip install --upgrade pip
         python3 -m pip install jinja2
 
